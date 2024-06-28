@@ -27,6 +27,9 @@ def cancel_subscription(email):
                 st.write(f"Subscription {subscription['id']} will be canceled at the end of the current period.")
 
 st.title("Mi GYM! 🚀")
+add_auth(required=False)
+st.write(st.session_state)
+
 add_auth(required=True)
 
 # ONLY AFTER THE AUTHENTICATION + SUBSCRIPTION, THE USER WILL SEE THIS ⤵
