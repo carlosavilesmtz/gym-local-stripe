@@ -1,6 +1,9 @@
 import streamlit as st
 from st_paywall import add_auth
 import stripe
+from sqlalchemy import text
+
+
 st.set_page_config(layout="wide", page_title="Streamlit App", page_icon=":tada:", initial_sidebar_state="auto", menu_items=None)
 
 def get_customer_id(email):
@@ -27,17 +30,31 @@ def cancel_subscription(email):
                 st.write(f"Subscription {subscription['id']} will be canceled at the end of the current period.")
 
 st.title("Mi GYM! 🚀")
-add_auth(required=False)
-st.write(st.session_state)
+
+conn = st.connection('mysql', type='sql')
+gym_subs = conn.query('select * from gym_subs', ttl=100)
+st.dataframe(gym_subs)
+st.write(gym_subs)
 
 add_auth(required=True)
 
 # ONLY AFTER THE AUTHENTICATION + SUBSCRIPTION, THE USER WILL SEE THIS ⤵
 # The email and subscription status is stored in session state.
 
+email = st.session_state.email
+sub = conn.query('SELECT email FROM gym_subs WHERE email="'+email+'"')
+st.write(sub['email'])
+if sub['email'].empty:
+    with conn.session as session:
+        session.execute(text("INSERT INTO gym_subs (email, subscription) VALUES (:email, :subscription);"), {"email":email, "subscription":1})
+        session.commit()
+    st.write("Subscription added successfully!")
+else:
+    st.write(f'Welcome333!'+email+'!')
+
 st.write(st.session_state)
 
-email = st.session_state.email
+
 
 if 'confirm' not in st.session_state:
     st.session_state.confirm = False

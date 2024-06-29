@@ -1,5 +1,6 @@
 streamlit
 st-paywall
-SQLAlchemy
+streamlit==1.31.1
+SQLAlchemy==2.0.27
 mysqlclient
 
