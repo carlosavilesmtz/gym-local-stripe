@@ -44,7 +44,7 @@ add_auth(required=True)
 email = st.session_state.email
 sub = conn.query('SELECT email FROM gym_subs WHERE email="'+email+'"')
 st.write(sub['email'])
-if sub['email'].empty:
+if st.session_state.user_subscribed == False:
     with conn.session as session:
         session.execute(text("INSERT INTO gym_subs (email, subscription) VALUES (:email, :subscription);"), {"email":email, "subscription":1})
         session.commit()
