@@ -42,12 +42,14 @@ add_auth(required=True)
 # The email and subscription status is stored in session state.
 
 email = st.session_state.email
+
 sub = conn.query('SELECT email FROM gym_subs WHERE email="'+email+'"')
 st.write(sub['email'])
-if st.session_state.user_subscribed == False:
+if (sub['email']).empty:
     with conn.session as session:
         session.execute(text("INSERT INTO gym_subs (email, subscription) VALUES (:email, :subscription);"), {"email":email, "subscription":1})
         session.commit()
+    st.cache_data.clear()
     st.write("Subscription added successfully!")
 else:
     st.write(f'Welcome333!'+email+'!')
