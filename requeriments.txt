@@ -1,5 +1,0 @@
-streamlit
-st-paywall
-SQLAlchemy==2.0.27
-mysqlclient
-
