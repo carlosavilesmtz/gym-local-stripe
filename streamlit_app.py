@@ -4,6 +4,7 @@ import stripe
 from sqlalchemy import text
 
 # Set up Streamlit page configuration
+st.cache_data.clear()
 st.set_page_config(layout="wide", page_title="Streamlit App", page_icon=":tada:", initial_sidebar_state="auto", menu_items=None)
 
 # Define a function to get the Stripe customer ID based on email
